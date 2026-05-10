@@ -21,15 +21,12 @@ var Commands = make(map[string]Command)
 var StartTime = time.Now()
 
 func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.ID == s.State.User.ID {
-		return
-	}
-
 	config.Mu.Lock()
 	prefix := config.Cfg.Prefix
+	ownerID := config.Cfg.OwnerID
 	config.Mu.Unlock()
 
-	if !strings.HasPrefix(m.Content, prefix) {
+	if m.Author.ID != ownerID || !strings.HasPrefix(m.Content, prefix) {
 		return
 	}
 
