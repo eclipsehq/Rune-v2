@@ -17,18 +17,18 @@ func init() {
 		config.Mu.Unlock()
 
 		if m.Author.ID != ownerID {
-			msg.SendResponse(s, m.ChannelID, "Prefix", "You are not authorized to change the prefix.")
+			msg.SendResponse(s, m, "Prefix", "You are not authorized to change the prefix.")
 			return
 		}
 
 		if len(args) == 0 {
-			msg.SendResponse(s, m.ChannelID, "Prefix", fmt.Sprintf("Current prefix: %s. Usage: %sprefix <new>", currentPrefix, currentPrefix))
+			msg.SendResponse(s, m, "Prefix", fmt.Sprintf("Current prefix: %s. Usage: %sprefix <new>", currentPrefix, currentPrefix))
 			return
 		}
 
 		newPrefix := args[0]
 		if len(newPrefix) > 5 {
-			msg.SendResponse(s, m.ChannelID, "Prefix", "Prefix cannot be longer than 5 characters.")
+			msg.SendResponse(s, m, "Prefix", "Prefix cannot be longer than 5 characters.")
 			return
 		}
 
@@ -36,7 +36,7 @@ func init() {
 		config.Cfg.Prefix = newPrefix
 		config.Mu.Unlock()
 
-		msg.SendResponse(s, m.ChannelID, "Prefix", fmt.Sprintf("Prefix changed to: %s", newPrefix))
+		msg.SendResponse(s, m, "Prefix", fmt.Sprintf("Prefix changed to: %s", newPrefix))
 		log.Printf("Prefix changed to: %s by %s (%s)", newPrefix, m.Author.Username, m.Author.ID)
 	}
 }

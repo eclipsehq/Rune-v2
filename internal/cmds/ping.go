@@ -7,6 +7,6 @@ import (
 
 func init() {
 	Commands["ping"] = func(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-		msg.SendResponse(s, m.ChannelID, "Ping", "Pong!")
+		msg.SendResponse(s, m, "Ping", "Pong!")
 	}
 }

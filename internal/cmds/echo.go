@@ -10,10 +10,10 @@ import (
 func init() {
 	Commands["echo"] = func(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		if len(args) == 0 {
-			msg.SendResponse(s, m.ChannelID, "Echo", "Please provide a message to echo.")
+			msg.SendResponse(s, m, "Echo", "Please provide a message to echo.")
 			return
 		}
 
-		msg.SendResponse(s, m.ChannelID, "Echo", strings.Join(args, " "))
+		msg.SendMessage(s, m, strings.Join(args, " "))
 	}
 }
