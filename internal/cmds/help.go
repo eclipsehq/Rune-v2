@@ -29,7 +29,7 @@ func init() {
 
 		for name, cmd := range Commands {
 			if strings.ToLower(cmd.Category) == target {
-				cmdList = append(cmdList, fmt.Sprintf("%s - %s", name, cmd.Description))
+				cmdList = append(cmdList, fmt.Sprintf("%s%s - %s", prefix, name, cmd.Description))
 			}
 		}
 

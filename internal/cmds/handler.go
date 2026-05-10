@@ -3,6 +3,7 @@ package cmds
 import (
 	"rune/internal/config"
 	"strings"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -17,6 +18,7 @@ type Command struct {
 }
 
 var Commands = make(map[string]Command)
+var StartTime = time.Now()
 
 func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
