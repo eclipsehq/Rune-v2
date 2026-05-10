@@ -1,4 +1,4 @@
-```markdown
+
 # Rune V2
 
 **Rune V2** is a high-performance, modern Discord self-bot written entirely in **Go**. It is a complete ground-up remaster of the original project by **eclipsehq**, rebuilt for maximum stability, speed, and maintainability.
