@@ -1,26 +1,40 @@
+```markdown
 # Rune V2
 
-Rune V2 is a high-performance, modern Discord self-bot written in Go. It serves as a complete remaster of the original project by **eclipsehq**, rebuilt from the ground up for stability, speed, and maintainability.
+**Rune V2** is a high-performance, modern Discord self-bot written entirely in **Go**. It is a complete ground-up remaster of the original project by **eclipsehq**, rebuilt for maximum stability, speed, and maintainability.
 
 Developed with ❤️ by **Light (eclipsehq)** and **Heavenzone**.
 
 ## 🚀 Features
 
-- **Cleaner Codebase**: Rewritten using Go for better concurrency and memory management.
-- **Actually Runnable**: Focus on stability and ease of deployment.
-- **Maintained**: Active development and bug fixes.
-- **ANSI Styling**: Beautifully formatted terminal-style responses in Discord using ANSI escape codes.
-- **Dynamic Prefix**: Change your bot prefix on the fly.
+- **Clean & Modern Codebase**: Fully rewritten in Go for excellent concurrency, low memory usage, and high performance.
+- **Lightweight**: Only **2.6 MB** of memory usage with **46 commands** loaded on modern hardware.
+- **Production-Ready**: Designed to be stable and easy to deploy.
+- **Actively Maintained**: Regular updates and bug fixes.
+- **Beautiful ANSI Styling**: Clean, terminal-style formatted responses in Discord using ANSI escape codes.
+- **Dynamic Prefix**: Change your command prefix on the fly.
+- **40-70+ Commands**: A growing suite of utility, fun, and information commands (exact count fluctuates as we frequently add new ones).
 
-## 🗺️ Roadmap
+## 🗺️ Goals & Roadmap
 
-- [ ] **Web Panel**: Manage your self-bot through a dedicated web interface.
-- [ ] **200+ Commands**: Integration of a massive library of utility, fun, and information commands.
-- [ ] **Advanced Logging**: Track interactions and events with more detail.
+Our goals remain the same: deliver the best possible self-bot experience — fast, reliable, and user-friendly.
+
+**Current Roadmap:**
+- [ ] **Web Panel**: Full web interface to manage your self-bot remotely.
+- [ ] **100+ Commands**: Expanding the command library significantly.
+- [ ] **Advanced Logging & Analytics**: Detailed tracking of events and interactions.
+- [ ] **Frontend Integration**: Small frontend components coming soon.
+
+## ⚠️ Important Notice
+
+**This project is still in active development.**  
+We **do not** want this project to be skidded. Please respect the work of the developers and do not re-upload or claim this as your own.
+
+> **Warning**: Rune V2 is a **self-bot**. Using self-bots violates Discord's Terms of Service and can result in your account being terminated. Use at your own risk. Never share your token.
 
 ## 🛠️ Installation
 
-1. Ensure you have [Go](https://go.dev/doc/install) (1.21+) installed.
+1. Install [Go](https://go.dev/doc/install) (1.21 or higher).
 2. Clone the repository:
    ```bash
    git clone https://github.com/eclipsehq/Rune-v2.git
@@ -37,7 +51,7 @@ Developed with ❤️ by **Light (eclipsehq)** and **Heavenzone**.
 
 ## ⚙️ Configuration
 
-Edit the `cfg/config.json` file with your credentials:
+Edit `cfg/config.json` with your details:
 
 ```json
 {
@@ -47,10 +61,12 @@ Edit the `cfg/config.json` file with your credentials:
 }
 ```
 
-> **Warning**: Never share your token. Rune V2 is a self-bot; using self-bots can lead to account termination by Discord. Use at your own risk.
-
 ## 📜 License
 
-This project is licensed under the terms of the license included in the repository.
+This project is licensed under the terms included in the repository.
 
 ---
+
+**Made with ❤️ by Light & Heavenzone**  
+*Still cooking — stay tuned for more.*
+```
