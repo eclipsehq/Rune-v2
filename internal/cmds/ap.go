@@ -1,6 +1,7 @@
 package cmds
 
 import (
+	"context"
 	"bufio"
 	"fmt"
 	"os"
@@ -21,9 +22,16 @@ func init() {
 				return
 			}
 
+			ctx, cancel := context.WithCancel(context.Background())
+			TaskMu.Lock()
+			if oldCancel, ok := ActiveTasks["ap"]; ok { oldCancel() }
+			ActiveTasks["ap"] = cancel
+			TaskMu.Unlock()
+
 			target := args[0]
 
 			go func() {
+				defer func() { TaskMu.Lock(); delete(ActiveTasks, "ap"); TaskMu.Unlock() }()
 				var words []string
 				file, err := os.Open("cfg/words.txt")
 				if err != nil {
@@ -46,11 +54,15 @@ func init() {
 				endTime := time.Now().Add(30 * time.Second)
 				i := 0
 				for time.Now().Before(endTime) {
+					select {
+					case <-ctx.Done(): return
+					default:
 					word := words[i%len(words)]
 					content := fmt.Sprintf("# %s %s", word, target)
 					msg.SendMessage(s, m, content)
 					i++
 					time.Sleep(1200 * time.Millisecond)
+					}
 				}
 			}()
 		},

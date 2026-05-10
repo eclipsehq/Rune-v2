@@ -39,7 +39,11 @@ func init() {
 		var cmdList []string
 		for name, cmd := range Commands {
 			if strings.ToLower(cmd.Category) == query {
-				cmdList = append(cmdList, fmt.Sprintf("%s%s - %s", prefix, name, cmd.Description))
+				entry := fmt.Sprintf("%s%s - %s", prefix, name, cmd.Description)
+				if len(cmd.Aliases) > 0 {
+					entry += fmt.Sprintf(" \u001b[0;30m(%s)\u001b[0m", strings.Join(cmd.Aliases, ", "))
+				}
+				cmdList = append(cmdList, entry)
 			}
 		}
 
