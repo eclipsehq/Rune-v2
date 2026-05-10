@@ -6,7 +6,11 @@ import (
 )
 
 func init() {
-	Commands["ping"] = func(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
-		msg.SendResponse(s, m, "Ping", "Pong!")
+	Commands["ping"] = Command{
+		Category:    "utility",
+		Description: "Checks the bot's response time.",
+		Execute: func(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+			msg.SendResponse(s, m, "Ping", "Pong!")
+		},
 	}
 }

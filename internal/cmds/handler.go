@@ -1,7 +1,7 @@
 package cmds
 
 import (
-	"rune/internal/config" // Ensure this folder exists at /internal/config/
+	"rune/internal/config"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -9,7 +9,14 @@ import (
 
 
 type CommandFunc func(s *discordgo.Session, m *discordgo.MessageCreate, args []string)
-var Commands = make(map[string]CommandFunc)
+
+type Command struct {
+	Execute     CommandFunc
+	Category    string
+	Description string
+}
+
+var Commands = make(map[string]Command)
 
 func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
@@ -31,7 +38,7 @@ func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	name := strings.ToLower(parts[0])
-	if fn, ok := Commands[name]; ok {
-		fn(s, m, parts[1:])
+	if cmd, ok := Commands[name]; ok {
+		cmd.Execute(s, m, parts[1:])
 	}
 }

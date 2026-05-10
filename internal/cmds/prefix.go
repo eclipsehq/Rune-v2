@@ -10,7 +10,10 @@ import (
 )
 
 func init() {
-	Commands["prefix"] = func(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
+	Commands["prefix"] = Command{
+		Category:    "utility",
+		Description: "Changes the bot's command prefix.",
+		Execute: func(s *discordgo.Session, m *discordgo.MessageCreate, args []string) {
 		config.Mu.Lock()
 		ownerID := config.Cfg.OwnerID
 		currentPrefix := config.Cfg.Prefix
@@ -38,5 +41,6 @@ func init() {
 
 		msg.SendResponse(s, m, "Prefix", fmt.Sprintf("Prefix changed to: %s", newPrefix))
 		log.Printf("Prefix changed to: %s by %s (%s)", newPrefix, m.Author.Username, m.Author.ID)
+		},
 	}
 }
