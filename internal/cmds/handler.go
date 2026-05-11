@@ -68,7 +68,6 @@ func HandleUpdate(s *discordgo.Session, m *discordgo.MessageUpdate) {
 }
 
 func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
-	// Centralized Recovery to prevent bot crashes
 	defer func() {
 		if r := recover(); r != nil {
 			log.Printf("[PANIC] Recovered in Handle: %v", r)
@@ -108,7 +107,6 @@ func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if targetCmd != nil {
-		// Cooldown Check
 		cdKey := fmt.Sprintf("%s:%s", m.Author.ID, name)
 		cdMu.Lock()
 		if lastUsed, exists := cooldowns[cdKey]; exists && time.Since(lastUsed) < targetCmd.Cooldown {
@@ -120,7 +118,7 @@ func Handle(s *discordgo.Session, m *discordgo.MessageCreate) {
 		cooldowns[cdKey] = time.Now()
 		cdMu.Unlock()
 
-		s.ChannelMessageDelete(m.ChannelID, m.ID)
 		targetCmd.Execute(s, m, parts[1:])
+		s.ChannelMessageDelete(m.ChannelID, m.ID)
 	}
 }
