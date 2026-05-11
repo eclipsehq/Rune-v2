@@ -1,0 +1,14 @@
+This project is licensed under the GNU General Public License v3.0 (GNU GPL-3.0).
+
+You are free to use, modify, and distribute this project under the terms of the license provided that all original copyright notices, credits, and license references remain intact.
+
+Original development credits belong to:
+
+- light (eclipsehq)
+- heavenzone
+
+Do not remove, alter, or misrepresent the original authorship or attribution present within this repository, source files, commits, documentation, or related materials.
+
+Any forks, modifications, or redistributions of this project must preserve existing credits and include the original GNU GPL-3.0 license.
+
+Respect the work of the original developers.
