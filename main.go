@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -14,14 +13,8 @@ import (
 )
 
 func main() {
-	file, err := os.Open("cfg/config.json")
-	if err != nil {
-		log.Fatalf("Error opening config.json: %v. Make sure the file exists in the 'cfg' directory and is accessible.", err)
-	}
-	defer file.Close()
-
-	if err := json.NewDecoder(file).Decode(&config.Cfg); err != nil {
-		log.Fatalf("Error decoding config.json: %v", err)
+	if err := config.LoadConfig("cfg/config.json"); err != nil {
+		log.Fatalf("Critical error loading config: %v", err)
 	}
 
 	if config.Cfg.Token == "" || config.Cfg.Token == "YOUR_USER_TOKEN_HERE" {
@@ -44,6 +37,9 @@ func main() {
 			log.Printf("WARNING: The bot's user ID (%s) does not match the configured owner ID (%s). Owner-only commands might not work as expected.", r.User.ID, config.Cfg.OwnerID)
 		}
 	})
+	dg.AddHandler(cmds.TrackMessages)
+	dg.AddHandler(cmds.HandleDelete)
+	dg.AddHandler(cmds.HandleUpdate)
 	dg.AddHandler(cmds.Handle)
 	err = dg.Open()
 	if err != nil {

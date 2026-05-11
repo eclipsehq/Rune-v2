@@ -14,6 +14,11 @@ func send(s *discordgo.Session, m *discordgo.MessageCreate, content string) {
 	})
 }
 
+// Typing triggers the "is typing..." indicator in the channel.
+func Typing(s *discordgo.Session, m *discordgo.MessageCreate) {
+	s.ChannelTyping(m.ChannelID)
+}
+
 func SendMessage(s *discordgo.Session, m *discordgo.MessageCreate, content string) {
 	send(s, m, content)
 }
