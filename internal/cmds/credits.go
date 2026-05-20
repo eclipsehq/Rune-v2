@@ -19,11 +19,11 @@ func init() {
 
 			cmdCount := len(Commands)
 
-			output := fmt.Sprintf("Developed with ❤️ by Light (eclipsehq) & Heavenzone\nA remaster of the eclipsehq legacy\n\nStats:\n- Version  :: v%s\n- Commands :: %d\n- RAM Usage:: %.2f MB", 
+			output := fmt.Sprintf("Developed with ❤️ by Light (eclipsehq) & val\nA remaster of the eclipsehq legacy\n\nStats:\n- Version  :: v%s\n- Commands :: %d\n- RAM Usage:: %.2f MB", 
 				msg.Version, cmdCount, ramUsage)
 			
 			if len(args) > 0 && args[0] == "secret" {
-				output += "\n\n||heavenzone the gawd||"
+				output += "\n\n||val the gawd||"
 			}
 
 			msg.SendResponse(s, m, "Credits & Stats", output)
