@@ -3,7 +3,7 @@
 
 **Rune V2** is a high-performance, modern Discord self-bot written entirely in **Go**. It is a complete ground-up remaster of the original project by **eclipsehq**, rebuilt for maximum stability, speed, and maintainability.
 
-Developed with ❤️ by **Light (eclipsehq)** and **Heavenzone**.
+Developed with ❤️ by **Light (eclipsehq)** and **val**.
 
 ## 🚀 Features
 
@@ -67,6 +67,6 @@ This project is licensed under the terms included in the repository.
 
 ---
 
-**Made with ❤️ by Light & Heavenzone**  
+**Made with ❤️ by Light & val**  
 *Still cooking — stay tuned for more.*
 ```
