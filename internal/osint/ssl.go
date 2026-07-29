@@ -6,7 +6,6 @@ import (
 	"crypto/x509"
 	"fmt"
 	"net"
-	"net/http"
 	"strings"
 	"time"
 )
@@ -68,56 +67,33 @@ func runSSLChecks(ctx context.Context, target string) (*SSLResult, error) {
 	}
 	result.IP = ips[0].String()
 
-	// Connect to the server using HTTP client to get TLS info
-	// We'll use an HTTP client with TLS connection
-	url := fmt.Sprintf("https://%s:%d", target, port)
-	
-	// Create a custom transport to capture TLS info
-	transport := &http.Transport{
-		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: false,
-			ServerName:         target,
-		},
-	}
-	
-	client := &http.Client{
-		Transport: transport,
-		Timeout:   15 * time.Second,
-	}
-	
-	// Make a request to get the connection
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
-	if err != nil {
-		// Try without port
-		url = fmt.Sprintf("https://%s", target)
-		req, err = http.NewRequestWithContext(ctx, "GET", url, nil)
-		if err != nil {
-			return nil, err
-		}
-	}
-	
-	// We don't actually send the request, just use the transport to get TLS info
-	// Instead, let's use a direct TLS connection
-	
-	// Use tls.Connect for direct connection
-	conn, err := tls.Connect(target, port, &tls.Config{
-		InsecureSkipVerify: false,
-		ServerName:         target,
-	})
+	// Try to connect using net.Dial with TLS
+	addr := fmt.Sprintf("%s:%d", target, port)
+	conn, err := net.DialTimeout("tcp", addr, 10*time.Second)
 	if err != nil {
 		// Try with IP
-		conn, err = tls.Connect(result.IP, port, &tls.Config{
-			InsecureSkipVerify: false,
-			ServerName:         target,
-		})
+		addr = fmt.Sprintf("%s:%d", result.IP, port)
+		conn, err = net.DialTimeout("tcp", addr, 10*time.Second)
 		if err != nil {
 			return nil, fmt.Errorf("failed to connect: %v", err)
 		}
 	}
 	defer conn.Close()
 
+	// Wrap the connection in TLS
+	tlsConn := tls.Client(conn, &tls.Config{
+		InsecureSkipVerify: false,
+		ServerName:         target,
+	})
+	defer tlsConn.Close()
+
+	// Perform the TLS handshake
+	if err := tlsConn.Handshake(); err != nil {
+		return nil, fmt.Errorf("TLS handshake failed: %v", err)
+	}
+
 	// Get connection state
-	state := conn.ConnectionState()
+	state := tlsConn.ConnectionState()
 	result.Valid = true
 	result.TLSVersion = tlsVersionToString(state.Version)
 
@@ -132,8 +108,8 @@ func runSSLChecks(ctx context.Context, target string) (*SSLResult, error) {
 		result.Certificate = parseCertificate(cert)
 	}
 
-	// Check if certificate is valid
-	if err := conn.VerifyHostname(target); err != nil {
+	// Check if certificate is valid for the hostname
+	if err := state.PeerCertificates[0].CheckHostname(target); err != nil {
 		result.Valid = false
 	}
 
@@ -169,21 +145,14 @@ func parseCertificate(cert *x509.Certificate) *CertificateInfo {
 		info.SANs = append(info.SANs, ip.String())
 	}
 
-	// Get public key size
-	if cert.PublicKey != nil {
-		// Try to get the key size based on algorithm
-		switch cert.PublicKeyAlgorithm {
-		case x509.RSA:
-			if rsaKey, ok := cert.PublicKey.(*x509.PublicKey); ok {
-				// For RSA, we can't easily get the size without the actual key
-				// This is a placeholder
-				info.PublicKeySize = 2048 // Default assumption
-			}
-		case x509.ECDSA:
-			info.PublicKeySize = 256 // Common ECDSA size
-		case x509.Ed25519:
-			info.PublicKeySize = 256
-		}
+	// Get public key size based on algorithm
+	switch cert.PublicKeyAlgorithm {
+	case x509.RSA:
+		info.PublicKeySize = 2048 // Default RSA size
+	case x509.ECDSA:
+		info.PublicKeySize = 256 // Common ECDSA size
+	case x509.Ed25519:
+		info.PublicKeySize = 256
 	}
 
 	return info

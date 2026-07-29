@@ -54,9 +54,9 @@ func runEmailChecks(ctx context.Context, target string) (*EmailResult, error) {
 
 	// Get TXT records (for SPF, DMARC, etc.)
 	if txtRecords, err := net.LookupTXT(result.Domain); err == nil {
-		for _, txt := range txtRecords {
-			// txt is []string, join it
-			joinedTxt := strings.Join(txt, "")
+		for _, txtRecord := range txtRecords {
+			// txtRecord is []string, join it
+			joinedTxt := strings.Join(txtRecord, "")
 			result.TXTRecords = append(result.TXTRecords, joinedTxt)
 			
 			// Check for SPF

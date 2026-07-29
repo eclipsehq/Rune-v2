@@ -33,9 +33,13 @@ func runWebChecks(ctx context.Context, target string) (*WebResult, error) {
 		target = "https://" + target
 	}
 
+	// Parse URL to validate it
 	parsedURL, err := url.Parse(target)
 	if err != nil {
 		return nil, fmt.Errorf("invalid URL: %v", err)
+	}
+	if parsedURL.Host == "" {
+		return nil, fmt.Errorf("no host in URL")
 	}
 
 	result := &WebResult{
@@ -145,15 +149,6 @@ func detectTechnologies(result *WebResult, resp *http.Response) {
 		result.TechStack = append(result.TechStack, "Powered by: "+poweredBy)
 	}
 
-	// Check common frameworks
-	frameworks := []string{
-		"PHP", "ASP.NET", "Node.js", "Express", "Django", "Flask", 
-		"Ruby on Rails", "Laravel", "WordPress", "Joomla", "Drupal",
-	}
-	
-	// This would be enhanced with actual detection logic
-	// For now, we'll just add placeholders
-	
 	// Check Content-Type for hints
 	if contentType, exists := result.Headers["Content-Type"]; exists {
 		if strings.Contains(contentType, "PHP") {
