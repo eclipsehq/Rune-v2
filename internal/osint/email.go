@@ -54,19 +54,18 @@ func runEmailChecks(ctx context.Context, target string) (*EmailResult, error) {
 
 	// Get TXT records (for SPF, DMARC, etc.)
 	if txtRecords, err := net.LookupTXT(result.Domain); err == nil {
-		for _, txtRecord := range txtRecords {
-			// txtRecord is []string, join it
-			joinedTxt := strings.Join(txtRecord, "")
-			result.TXTRecords = append(result.TXTRecords, joinedTxt)
+		for _, txt := range txtRecords {
+			// txt is already a string from LookupTXT
+			result.TXTRecords = append(result.TXTRecords, txt)
 			
 			// Check for SPF
-			if strings.HasPrefix(strings.ToLower(joinedTxt), "v=spf1") {
-				result.SPFRecord = joinedTxt
+			if strings.HasPrefix(strings.ToLower(txt), "v=spf1") {
+				result.SPFRecord = txt
 			}
 			
 			// Check for DMARC
-			if strings.HasPrefix(strings.ToLower(joinedTxt), "v=dmarc1") {
-				result.DMARCRecord = joinedTxt
+			if strings.HasPrefix(strings.ToLower(txt), "v=dmarc1") {
+				result.DMARCRecord = txt
 			}
 		}
 	}

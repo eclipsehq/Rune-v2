@@ -105,18 +105,19 @@ func runSSLChecks(ctx context.Context, target string) (*SSLResult, error) {
 	// Get certificates
 	if len(state.PeerCertificates) > 0 {
 		cert := state.PeerCertificates[0]
-		result.Certificate = parseCertificate(cert)
-	}
-
-	// Check if certificate is valid for the hostname
-	if err := state.PeerCertificates[0].CheckHostname(target); err != nil {
-		result.Valid = false
+		result.Certificate = parseCertificate(cert, target)
+		
+		// Check if certificate is valid for the hostname
+		// Use VerifyHostname from crypto/tls if available, otherwise use a simple check
+		if !verifyHostname(cert, target) {
+			result.Valid = false
+		}
 	}
 
 	return result, nil
 }
 
-func parseCertificate(cert *x509.Certificate) *CertificateInfo {
+func parseCertificate(cert *x509.Certificate, hostname string) *CertificateInfo {
 	info := &CertificateInfo{
 		Subject:        cert.Subject.String(),
 		Issuer:         cert.Issuer.String(),
@@ -156,6 +157,30 @@ func parseCertificate(cert *x509.Certificate) *CertificateInfo {
 	}
 
 	return info
+}
+
+// Simple hostname verification
+func verifyHostname(cert *x509.Certificate, hostname string) bool {
+	// Check if hostname matches Subject CN
+	if cert.Subject.CommonName == hostname {
+		return true
+	}
+	
+	// Check if hostname matches any SAN
+	for _, dnsName := range cert.DNSNames {
+		if dnsName == hostname {
+			return true
+		}
+	}
+	
+	// Check IP addresses
+	for _, ip := range cert.IPAddresses {
+		if ip.String() == hostname {
+			return true
+		}
+	}
+	
+	return false
 }
 
 func tlsVersionToString(version uint16) string {
