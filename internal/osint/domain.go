@@ -120,7 +120,7 @@ func runDNSChecks(ctx context.Context, target string, result *DomainResult) erro
 				case "SOA":
 					if soa, ok := ans.(*dns.SOA); ok {
 						records = append(records, fmt.Sprintf("%s %s %d %d %d %d %d", 
-							soa.Ns, soa.Mx, soa.Serial, soa.Refresh, soa.Retry, soa.Expire, soa.Minimum))
+							soa.Ns, soa.Mbox, soa.Serial, soa.Refresh, soa.Retry, soa.Expire, soa.Minimum))
 					}
 				case "CAA":
 					if caa, ok := ans.(*dns.CAA); ok {

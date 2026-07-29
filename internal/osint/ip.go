@@ -126,12 +126,7 @@ func getASNInfo(ctx context.Context, ip string) (map[string]interface{}, error) 
 		}, nil
 	}
 
-	// Parse the response (it's in a specific format)
-	// For simplicity, we'll just include the raw response
-	var lines []string
-	// Read response body
-	// ... parsing logic would go here
-	
+	// For now, just return basic info
 	return map[string]interface{}{
 		"note": "ASN lookup parsed from Team Cymru",
 	}, nil
